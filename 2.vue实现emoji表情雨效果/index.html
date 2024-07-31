@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emoji Rain Effect</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="emojiCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('emojiCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas size to cover the whole window
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Array of emojis
+    const emojis = ['😀', '😊', '😄', '❤️', '🌟', '🌈', '🍎', '🍌', '🍒', '🍓', '🍕', '🍔', '🍟', '🍦', '🍭', '🍩', '🍰', '🥝', '🥑', '🥨', '🥪', '🥯', '🧀', '🥞', '🍳', '🥓', '🥐', '🍞', '🍫', '🍮', '🍬', '🍯', '🥜', '🌰', '🍇', '🍈', '🍉', '🍊', '🍋', '🍍', '🍎', '🍏', '🍐', '🍑', '🍒', '🍓', '🥥', '🥭', '🥦']; // Add more emojis as needed
+
+    function randomEmoji() {
+      return emojis[Math.floor(Math.random() * emojis.length)];
+    }
+
+    function Emoji(x, y, speed) {
+      this.x = x;
+      this.y = y;
+      this.speed = speed;
+      this.emoji = randomEmoji();
+
+      this.fall = function() {
+        this.y += this.speed;
+        if (this.y > canvas.height) {
+          this.y = 0;
+          this.x = Math.random() * canvas.width;
+        }
+      };
+
+      this.draw = function() {
+        ctx.font = '24px serif';
+        ctx.fillText(this.emoji, this.x, this.y);
+      };
+    }
+
+    const emojiCount = 100; // Number of emojis
+    const emojisArr = [];
+
+    for (let i = 0; i < emojiCount; i++) {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      const speed = 1 + Math.random() * 3;
+      emojisArr.push(new Emoji(x, y, speed));
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < emojisArr.length; i++) {
+        emojisArr[i].fall();
+        emojisArr[i].draw();
+      }
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  </script>
+</body>
+</html>
